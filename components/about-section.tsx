@@ -1,6 +1,6 @@
 export function AboutSection() {
   return (
-    <section id="about" className="min-h-screen flex items-center justify-center px-6 py-32">
+    <section id="about" className="min-h-screen flex items-center justify-center px-6 py-20">
       <div className="max-w-6xl mx-auto">
         <h2 className="text-5xl md:text-6xl font-bold text-white mb-12 text-balance">About Us</h2>
 

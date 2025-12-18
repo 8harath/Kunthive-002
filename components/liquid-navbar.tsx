@@ -52,10 +52,14 @@ export function LiquidNavbar() {
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id)
     if (element) {
-      const offset = 100
+      // Calculate offset to center the section in viewport
+      // Account for navbar height and add padding to center the section better
+      const navbarHeight = 80
       const elementPosition = element.getBoundingClientRect().top + window.scrollY
+      const offsetPosition = elementPosition - navbarHeight
+      
       window.scrollTo({
-        top: elementPosition - offset,
+        top: offsetPosition,
         behavior: "smooth",
       })
     }
@@ -78,7 +82,7 @@ export function LiquidNavbar() {
               <button
                 onClick={() => scrollToSection(item.id)}
                 className={cn(
-                  "relative px-6 py-2.5 rounded-full text-lg font-medium transition-all duration-300",
+                  "relative px-6 py-2.5 rounded-full text-xl font-medium transition-all duration-300",
                   "hover:bg-white/10",
                   activeSection === item.id ? "text-white bg-white/20" : "text-white/70",
                 )}

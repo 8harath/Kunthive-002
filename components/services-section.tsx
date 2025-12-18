@@ -2,38 +2,38 @@ const services = [
   {
     title: "Full-Stack Development",
     description: "End-to-end application development with modern technologies and best practices.",
-    icon: "⚡",
+    icon: "",
   },
   {
     title: "Frontend Engineering",
     description: "Beautiful, responsive interfaces built with React, Next.js, and cutting-edge frameworks.",
-    icon: "🎨",
+    icon: "",
   },
   {
     title: "Backend Architecture",
     description: "Scalable server solutions, APIs, and database design for robust applications.",
-    icon: "🔧",
+    icon: "",
   },
   {
     title: "Mobile Development",
     description: "Native and cross-platform mobile applications for iOS and Android.",
-    icon: "📱",
+    icon: "",
   },
   {
     title: "DevOps & Cloud",
     description: "Infrastructure automation, CI/CD pipelines, and cloud deployment expertise.",
-    icon: "☁️",
+    icon: "",
   },
   {
     title: "Consulting",
     description: "Technical guidance, code reviews, and strategic development planning.",
-    icon: "💡",
+    icon: "",
   },
 ]
 
 export function ServicesSection() {
   return (
-    <section id="services" className="min-h-screen flex items-center justify-center px-6 py-32">
+    <section id="services" className="min-h-screen flex items-center justify-center px-6 py-20">
       <div className="max-w-7xl mx-auto w-full">
         <h2 className="text-5xl md:text-6xl font-bold text-white mb-6 text-balance">Our Services</h2>
         <p className="text-xl text-white/60 mb-16 max-w-3xl">

@@ -13,7 +13,7 @@ export default function Home() {
     <div className="relative min-h-screen">
       {/* Background - easily changeable */}
       <div 
-        className="fixed inset-0 -z-10 bg-cover bg-center bg-no-repeat" 
+        className="fixed inset-0 -z-10 bg-cover bg-center bg-no-repeat animate-background-zoom" 
         style={{ backgroundImage: "url('/sample-background-image.jpg')" }}
       >
         {/* Optional dark overlay for better text readability - adjust opacity as needed */}
