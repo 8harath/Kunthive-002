@@ -5,6 +5,7 @@ import { useState, useEffect } from "react"
 export function HeroSection() {
   const [heroOpacity, setHeroOpacity] = useState(1)
   const [desktopTitleOpacity, setDesktopTitleOpacity] = useState(1)
+  const [isMobile, setIsMobile] = useState(true)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -12,9 +13,10 @@ export function HeroSection() {
       if (!aboutSection) return
 
       const aboutRect = aboutSection.getBoundingClientRect()
-      const isMobile = window.innerWidth < 768
+      const isMobileCheck = window.innerWidth < 768
+      setIsMobile(isMobileCheck)
 
-      if (isMobile) {
+      if (isMobileCheck) {
         // Mobile opacity logic (existing behavior)
         const threshold = window.innerHeight * 0.7
         const fadeStart = window.innerHeight
@@ -77,7 +79,7 @@ export function HeroSection() {
           className="text-6xl md:text-8xl font-bold text-white mb-8 tracking-tight transition-opacity duration-700 ease-out" 
           style={{ 
             fontFamily: "'Nature Beauty', serif",
-            opacity: window.innerWidth >= 768 ? desktopTitleOpacity : heroOpacity
+            opacity: isMobile ? heroOpacity : desktopTitleOpacity
           }}
         >
           Kunthive
