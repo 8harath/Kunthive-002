@@ -23,6 +23,7 @@ export function LiquidNavbar() {
   const [activePillStyle, setActivePillStyle] = useState({ left: 0, width: 0 })
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [showMobileBrand, setShowMobileBrand] = useState(false)
+  const [showDesktopBrand, setShowDesktopBrand] = useState(false)
   const navRef = useRef<HTMLUListElement>(null)
   const buttonRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({})
 
@@ -67,7 +68,7 @@ export function LiquidNavbar() {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50)
 
-      // Mobile brand transition logic
+      // Brand transition logic for both mobile and desktop
       const aboutSection = document.getElementById('about')
       if (aboutSection) {
         const aboutRect = aboutSection.getBoundingClientRect()
@@ -75,6 +76,10 @@ export function LiquidNavbar() {
         // Using a smooth transition threshold
         const threshold = window.innerHeight * 0.7 // When about section is 30% into viewport
         setShowMobileBrand(aboutRect.top < threshold)
+        
+        // Desktop brand transition - more subtle threshold for smoother transition
+        const desktopThreshold = window.innerHeight * 0.8
+        setShowDesktopBrand(aboutRect.top < desktopThreshold)
       }
 
       // Update active section based on scroll position
@@ -158,25 +163,30 @@ export function LiquidNavbar() {
 
   return (
     <>
-      {/* Desktop Logo - fixed to the left corner (hidden on mobile) */}
-      <Link 
-        href="/"
+      {/* Desktop Brand - fixed to the left corner (hidden on mobile) */}
+      <div 
         className={cn(
-          "hidden md:block fixed left-10 z-50 transition-all duration-500 hover:opacity-80",
+          "hidden md:block fixed left-10 z-50 transition-all duration-700 ease-out",
           isScrolled ? "top-4" : "top-6"
         )}
+        style={{
+          height: 'calc(2rem + 2.5rem + 1.75rem)' // Match navbar height
+        }}
       >
-        <Image 
-          src="/logo-k.png" 
-          alt="Kunthive Logo" 
-          width={80} 
-          height={80}
-          className="w-auto object-contain"
-          style={{
-            height: 'calc(2rem + 2.5rem + 1.75rem)' // py-4 (2rem) + py-2.5 (1.25rem) + text-xl line-height (1.75rem)
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className={cn(
+            "text-3xl font-bold text-white tracking-tight hover:opacity-80 transition-all duration-700 ease-out flex items-center",
+            showDesktopBrand ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8 pointer-events-none"
+          )}
+          style={{ 
+            fontFamily: "'Nature Beauty', serif",
+            height: '100%'
           }}
-        />
-      </Link>
+        >
+          Kunthive
+        </button>
+      </div>
 
       {/* Desktop Navigation (hidden on mobile) */}
       <nav

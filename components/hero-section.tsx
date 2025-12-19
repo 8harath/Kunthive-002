@@ -4,23 +4,19 @@ import { useState, useEffect } from "react"
 
 export function HeroSection() {
   const [heroOpacity, setHeroOpacity] = useState(1)
+  const [desktopTitleOpacity, setDesktopTitleOpacity] = useState(1)
 
   useEffect(() => {
     const handleScroll = () => {
-      // Only apply on mobile
-      if (window.innerWidth >= 768) {
-        setHeroOpacity(1)
-        return
-      }
-
       const aboutSection = document.getElementById('about')
-      if (aboutSection) {
-        const aboutRect = aboutSection.getBoundingClientRect()
+      if (!aboutSection) return
+
+      const aboutRect = aboutSection.getBoundingClientRect()
+      const isMobile = window.innerWidth < 768
+
+      if (isMobile) {
+        // Mobile opacity logic (existing behavior)
         const threshold = window.innerHeight * 0.7
-        
-        // Calculate opacity based on how far the about section has entered
-        // When about section top is at threshold, opacity should be 0
-        // When about section top is below viewport, opacity should be 1
         const fadeStart = window.innerHeight
         const fadeEnd = threshold
         
@@ -31,6 +27,23 @@ export function HeroSection() {
         } else {
           const opacity = (aboutRect.top - fadeEnd) / (fadeStart - fadeEnd)
           setHeroOpacity(opacity)
+        }
+      } else {
+        // Desktop: Keep hero message visible, only fade the title
+        setHeroOpacity(1)
+        
+        // Desktop title opacity - smooth fade as About section enters viewport
+        const desktopThreshold = window.innerHeight * 0.8
+        const fadeStart = window.innerHeight
+        const fadeEnd = desktopThreshold
+        
+        if (aboutRect.top > fadeStart) {
+          setDesktopTitleOpacity(1)
+        } else if (aboutRect.top < fadeEnd) {
+          setDesktopTitleOpacity(0)
+        } else {
+          const opacity = (aboutRect.top - fadeEnd) / (fadeStart - fadeEnd)
+          setDesktopTitleOpacity(opacity)
         }
       }
     }
@@ -61,10 +74,10 @@ export function HeroSection() {
       <div className="max-w-7xl mx-auto text-center">
         {/* Logo/Brand Name */}
         <h1 
-          className="text-6xl md:text-8xl font-bold text-white mb-8 tracking-tight transition-opacity duration-500 md:!opacity-100" 
+          className="text-6xl md:text-8xl font-bold text-white mb-8 tracking-tight transition-opacity duration-700 ease-out" 
           style={{ 
             fontFamily: "'Nature Beauty', serif",
-            opacity: heroOpacity
+            opacity: window.innerWidth >= 768 ? desktopTitleOpacity : heroOpacity
           }}
         >
           Kunthive
