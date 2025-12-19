@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react"
 import { cn } from "@/lib/utils"
 import Image from "next/image"
 import Link from "next/link"
+import { Menu, X } from "lucide-react"
 
 const navItems = [
   { id: "about", label: "About" },
@@ -20,6 +21,7 @@ export function LiquidNavbar() {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null)
   const [hoverPillStyle, setHoverPillStyle] = useState({ left: 0, width: 0, opacity: 0 })
   const [activePillStyle, setActivePillStyle] = useState({ left: 0, width: 0 })
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const navRef = useRef<HTMLUListElement>(null)
   const buttonRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({})
 
@@ -106,16 +108,50 @@ export function LiquidNavbar() {
         top: offsetPosition,
         behavior: "smooth",
       })
+      
+      // Close mobile menu after navigation
+      setIsMobileMenuOpen(false)
     }
   }
 
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement
+      if (isMobileMenuOpen && !target.closest('.mobile-sidebar') && !target.closest('.mobile-menu-button')) {
+        setIsMobileMenuOpen(false)
+      }
+    }
+
+    if (isMobileMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [isMobileMenuOpen])
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isMobileMenuOpen])
+
   return (
     <>
-      {/* Logo - fixed to the left corner */}
+      {/* Desktop Logo - fixed to the left corner (hidden on mobile) */}
       <Link 
         href="/"
         className={cn(
-          "fixed left-10 z-50 transition-all duration-500 hover:opacity-80",
+          "hidden md:block fixed left-10 z-50 transition-all duration-500 hover:opacity-80",
           isScrolled ? "top-4" : "top-6"
         )}
       >
@@ -131,9 +167,10 @@ export function LiquidNavbar() {
         />
       </Link>
 
+      {/* Desktop Navigation (hidden on mobile) */}
       <nav
         className={cn(
-          "fixed top-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-500",
+          "hidden md:block fixed top-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-500",
           isScrolled ? "top-4" : "top-6",
         )}
       >
@@ -188,6 +225,93 @@ export function LiquidNavbar() {
         </ul>
       </div>
       </nav>
+
+      {/* Mobile Header (visible only on mobile) */}
+      <div className={cn(
+        "md:hidden fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+        "backdrop-blur-xl bg-white/10 border-b border-white/20",
+        isScrolled ? "shadow-lg" : ""
+      )}>
+        <div className="flex items-center justify-between px-4 py-3">
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="mobile-menu-button p-2 rounded-lg hover:bg-white/10 transition-colors"
+            aria-label="Toggle menu"
+          >
+            <Menu className="w-6 h-6 text-white" />
+          </button>
+          
+          <Link href="/" className="hover:opacity-80 transition-opacity">
+            <Image 
+              src="/logo-k.png" 
+              alt="Kunthive Logo" 
+              width={50} 
+              height={50}
+              className="w-auto h-12 object-contain"
+            />
+          </Link>
+        </div>
+      </div>
+
+      {/* Mobile Sidebar Overlay */}
+      <div
+        className={cn(
+          "md:hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 transition-opacity duration-300",
+          isMobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        )}
+        onClick={() => setIsMobileMenuOpen(false)}
+      />
+
+      {/* Mobile Sidebar Menu */}
+      <div
+        className={cn(
+          "mobile-sidebar md:hidden fixed top-0 left-0 bottom-0 w-72 z-50 transition-transform duration-300 ease-out",
+          "backdrop-blur-xl bg-white/10 border-r border-white/20 shadow-2xl",
+          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+        )}
+      >
+        {/* Mobile Menu Header */}
+        <div className="flex items-center justify-between p-4 border-b border-white/20">
+          <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
+            <Image 
+              src="/logo-k.png" 
+              alt="Kunthive Logo" 
+              width={50} 
+              height={50}
+              className="w-auto h-12 object-contain"
+            />
+          </Link>
+          <button
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+            aria-label="Close menu"
+          >
+            <X className="w-6 h-6 text-white" />
+          </button>
+        </div>
+
+        {/* Mobile Menu Items */}
+        <nav className="py-6">
+          <ul className="space-y-2 px-4">
+            {navItems.map((item) => (
+              <li key={item.id}>
+                <button
+                  onClick={() => scrollToSection(item.id)}
+                  className={cn(
+                    "w-full text-left px-6 py-4 rounded-xl text-lg font-medium transition-all duration-200",
+                    "hover:bg-white/10 active:scale-95",
+                    activeSection === item.id 
+                      ? "bg-white/20 text-white" 
+                      : "text-white/70"
+                  )}
+                >
+                  {item.label}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </div>
     </>
   )
 }
