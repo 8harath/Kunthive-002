@@ -38,7 +38,7 @@ export function ContactSection() {
 
             <button
               type="submit"
-              className="w-full px-8 py-4 bg-white text-black font-semibold rounded-xl hover:scale-105 transition-transform duration-300 shadow-xl shadow-white/20 hover:bg-white/90"
+              className="w-full px-8 py-4 bg-white text-black font-semibold rounded-xl hover:scale-105 transition-transform duration-300 shadow-xl shadow-white/20 hover:bg-white/90 text-lg"
             >
               Send Message
             </button>

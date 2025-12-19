@@ -214,7 +214,7 @@ export function LiquidNavbar() {
                 onClick={() => scrollToSection(item.id)}
                 onMouseEnter={() => handleMouseEnter(item.id)}
                 className={cn(
-                  "relative px-6 py-2.5 rounded-full text-xl font-medium transition-colors duration-300",
+                  "relative px-6 py-2.5 rounded-full text-2xl font-medium transition-colors duration-300",
                   activeSection === item.id ? "text-white" : "text-white/70",
                 )}
               >
@@ -298,7 +298,7 @@ export function LiquidNavbar() {
                 <button
                   onClick={() => scrollToSection(item.id)}
                   className={cn(
-                    "w-full text-left px-6 py-4 rounded-xl text-lg font-medium transition-all duration-200",
+                    "w-full text-left px-6 py-4 rounded-xl text-xl font-medium transition-all duration-200",
                     "hover:bg-white/10 active:scale-95",
                     activeSection === item.id 
                       ? "bg-white/20 text-white" 
